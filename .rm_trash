@@ -1,0 +1,36 @@
+TRASH="$HOME/.local/share/Trash/files"
+LOCATION=$(pwd)
+
+for t in $*
+do
+
+	#オプション除外
+	if [[ ${t:0:1} = '-' ]]; then
+		continue
+	fi
+
+	if [[ $t = '/' ]]; then
+		echo "rm: '$t' を削除できません: ルートは消してはいけません"
+		continue
+	fi
+
+	if [[ ! -w $t ]]; then
+		echo "rm: '$t' を削除できません: 許可がありません"
+		continue
+	fi
+
+	if [[ -f $t ]]; then
+
+		mv $t $TRASH/$(basename $t)
+
+	elif [[ -d $t ]]; then
+
+		mv $t $TRASH/
+
+	else
+
+		echo "rm: '$t' を削除できません: そのようなファイルやディレクトリはありません"
+
+	fi
+
+done
