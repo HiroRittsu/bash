@@ -1,6 +1,12 @@
 TRASH="$HOME/.local/share/Trash/files"
 LOCATION=$(pwd)
 
+if [[ ! -e $TRASH ]]; then
+
+        mkdir -p $TRASH
+
+fi
+
 for t in $*
 do
 
