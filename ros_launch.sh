@@ -21,8 +21,6 @@ last() {
 	exit 1
 }
 
-clear
-
 if [ `find ./ | grep -c "gradle"` -eq 0 ]; then
 
 	CATKIN_LANG="cpp"
@@ -35,6 +33,11 @@ if [ `find ./ | grep -c "gradle"` -eq 0 ]; then
 		cd `echo $i | sed 's@/@ @g' | awk '{print $2}'` #パッケージ内に移動
 		
 		TARGET=`echo $i | sed 's@/@ @g' | awk '{print $4}' | sed 's/.cpp//g'`
+
+		if [[ `cat CMakeLists.txt | grep -c 'auto-regist'` -eq 1 ]]; then
+			cd ../
+			continue
+		fi
 		 
 		if [ `cat CMakeLists.txt | grep -c $TARGET` -lt 2 ]; then
 		
@@ -67,7 +70,7 @@ fi
 
 if [ -f $LOG ] && [ `cat "$LOG" | grep -c "エラー"` -ne 0 ]; then
 
-	clear
+	
 	echo
 	echo "##############コンパイルエラー#############"
 	echo
@@ -89,7 +92,7 @@ if [ -f $LOG ] && [ `cat "$LOG" | grep -c "エラー"` -ne 0 ]; then
 
 fi
 
-clear
+
 echo
 
 [ $CATKIN_LANG = 'cpp' ] && list=(`find ./ -name "*.cpp" | grep -v "CMake"`)
